@@ -127,4 +127,52 @@ console.log(createUsernames(account1.owner));
 const deposits = movements.filter(mov => mov > 0);
 const withdrawals = movements.filter(mov => mov < 0);
 
-console.log(withdrawals);
+const balance = movements.reduce((acc, curr) => acc + curr, 0);
+console.log(balance);
+
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, curr) => acc + curr, 0);
+  labelBalance.textContent = `${balance} €`;
+  return balance;
+};
+
+const calcDisplaySummary = function (movements, interestRate) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumIn.textContent = `${incomes}€`;
+  const outgoing = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumOut.textContent = `${Math.abs(outgoing)}€`;
+  const interest = movements
+    .filter(arr => arr > 0)
+    .map(mov => (mov * interestRate) / 100)
+    .filter(int => int >= 1)
+    .reduce((arr, curr) => arr + curr, 0);
+  console.log(interest);
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+calcDisplaySummary(account1.movements, account1.interestRate);
+
+console.log(calcPrintBalance(account1.movements));
+
+const max = function (movements) {
+  const m = movements.reduce((acc, curr) => {
+    console.log(acc, curr);
+    return curr > acc ? curr : acc;
+  }, movements[0]);
+  return m;
+};
+
+console.log(max(account1.movements));
+
+const calcAverageHumanAge = ages =>
+  ages
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, curr, i, arr) => acc + curr / arr.length, 0);
+
+console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+console.log(calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]));
