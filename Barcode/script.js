@@ -2,13 +2,13 @@
 
 const barcode = {
   checkDigit(ean) {
-    const digits = [...ean].reverse();
-    let even = 0;
-    let odd = 0;
-    for (let i = 0; i < digits.length; i++) {
-      if (i % 2 == 0) even += Number(digits[i]);
-      else odd += Number(digits[i]);
-    }
+    const digits = [...ean].map((num) => Number(num)).reverse();
+    const even = digits
+      .filter((num, i) => i % 2 == 0)
+      .reduce((acc, cur) => acc + cur, 0);
+    const odd = digits
+      .filter((num, i) => i % 2)
+      .reduce((acc, cur) => acc + cur, 0);
     const cd = (odd + even * 3) % 10;
     return (10 - cd) % 10;
   },
